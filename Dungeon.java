@@ -11,6 +11,9 @@
          dungeonHeight = height;
          dungeon = new Tile[dungeonWidth][dungeonHeight];
          roomNumber = ((width * height)/100)*66;
+			int xRoomSize = roomNumber / ((dungeonWidth+dungeonHeight)/2);
+			int kRoomSize = xRoomSize * 3;
+			int yRoomSize = kRoomSize / xRoomSize;
          int lastTileType;
          int nextRoomDir;
          int lastRoomDir = 0;
@@ -35,17 +38,20 @@
          }
       	
       	//Second Room
+			xRoomSize = roomNumber / ((dungeonWidth+dungeonHeight)/2);
+			yRoomSize = (int)(kRoomSize / xRoomSize);
+			//System.out.println(yRoomSize + " " + kRoomSize + " " + xRoomSize);
          nextRoomDir = (int)(Math.random()*2);
          if (nextRoomDir == 0){
          
          	//making a hallway
-            dungeon[lastRoomWidth/2][lastRoomHeight] = new Tile((char)1);
-            dungeon[lastRoomWidth/2][lastRoomHeight+1] = new Tile((char)1);
+            dungeon[totalWidth-(lastRoomWidth/2)-1][totalHeight] = new Tile((char)1);
+            dungeon[totalWidth-(lastRoomWidth/2)-1][totalHeight+1] = new Tile((char)1);
             totalHeight = totalHeight+2;
          	
          	//making a room
-            roomWidth = (3+((int)Math.random()*3));
-            roomHeight = (3+((int)Math.random()*3));
+            roomWidth = (3+((int)(Math.random()*yRoomSize)));
+            roomHeight = (3+((int)(Math.random()*yRoomSize)));
             totalWidth = Math.max(totalWidth, roomWidth);
             totalHeight = totalHeight+roomHeight;
             for (int x = 0;x < roomWidth;x++){
@@ -62,13 +68,13 @@
          if (nextRoomDir == 1){
          
          	//making a hallway
-            dungeon[roomWidth][roomHeight/2] = new Tile((char)1);
-            dungeon[roomWidth+1][roomHeight/2] = new Tile((char)1);
+            dungeon[totalWidth][totalHeight-(lastRoomHeight/2)-1] = new Tile((char)1);
+            dungeon[totalWidth+1][totalHeight-(lastRoomHeight/2)-1] = new Tile((char)1);
             totalWidth = totalWidth+2;
          	
          	//making a room
-            roomWidth = (3+((int)Math.random()*3));
-            roomHeight = (3+((int)Math.random()*3));
+            roomWidth = (3+((int)(Math.random()*yRoomSize)));
+            roomHeight = (3+((int)(Math.random()*yRoomSize)));
             totalWidth = totalWidth+roomWidth;
             totalHeight = Math.max(totalHeight, roomHeight);
             for (int x = 0;x < roomWidth;x++){
@@ -85,21 +91,24 @@
       	
       	//More Rooms
          while(roomNumber > 0){
+				xRoomSize = roomNumber / ((dungeonWidth+dungeonHeight)/2);
+				yRoomSize = (int)(kRoomSize / xRoomSize);
+				//System.out.println(yRoomSize + " " + kRoomSize + " " + xRoomSize);
             nextRoomDir = (int)(Math.random()*2);
             if ((nextRoomDir == 0 && lastRoomDir == 0 && ((int)(Math.random()*100) > 25)) || (nextRoomDir == 0 && lastRoomDir != 0)){
             	
             	//making a hallway
                if(totalHeight+2 < dungeonHeight){
-                  dungeon[lastRoomWidth/2][lastRoomHeight] = new Tile((char)1);
-                  dungeon[lastRoomWidth/2][lastRoomHeight+1] = new Tile((char)1);
+                  dungeon[totalWidth-(lastRoomWidth/2)-1][totalHeight] = new Tile((char)1);
+            		dungeon[totalWidth-(lastRoomWidth/2)-1][totalHeight+1] = new Tile((char)1);;
                   totalHeight = totalHeight+2;
                }
                else{
                   break;}
             	
             	//making a room
-               roomWidth = (3+((int)Math.random()*3));
-               roomHeight = (3+((int)Math.random()*3));
+               roomWidth = (3+((int)(Math.random()*yRoomSize)));
+               roomHeight = (3+((int)(Math.random()*yRoomSize)));
                totalWidth = Math.max(totalWidth, roomWidth);
                totalHeight = totalHeight+roomHeight;
                if(totalHeight < dungeonHeight){
@@ -121,15 +130,15 @@
             
             	//making a hallway
                if(totalWidth+2 < dungeonWidth){
-                  dungeon[roomWidth][roomHeight/2] = new Tile((char)1);
-                  dungeon[roomWidth+1][roomHeight/2] = new Tile((char)1);
+                  dungeon[totalWidth][totalHeight-(lastRoomHeight/2)-1] = new Tile((char)1);
+            		dungeon[totalWidth+1][totalHeight-(lastRoomHeight/2)-1] = new Tile((char)1);
                   totalWidth = totalWidth+2;
                }
                else{
                   break;}
             	//making a room
-               roomWidth = (3+((int)Math.random()*3));
-               roomHeight = (3+((int)Math.random()*3));
+               roomWidth = (3+((int)(Math.random()*yRoomSize)));
+               roomHeight = (3+((int)(Math.random()*yRoomSize)));
                totalWidth = totalWidth+roomWidth;
                totalHeight = Math.max(totalHeight, roomHeight);
                if(totalWidth < dungeonWidth){
